@@ -42,13 +42,13 @@ I won’t go into more detail here, mainly because I’m a little bit burned out
 
 So for now here are two graphs that show the performance of this hash table. First for successful lookups (meaning looking up an item that’s in the table):
 
-![bytell_successful](graphs/bytell_successful?raw=true "bytell_successful")
+![bytell_successful](graphs/bytell_successful.png?raw=true "bytell_successful")
 
 This is the graph for a benchmark that’s spinning in a loop, looking up random items in the table. On the left side of the graph the table is small and fits in cache, on the right side the table is large and doesn’t fit in cache. In this graph we mostly just see that std::unordered_map is slow (this is the GCC version of std::unordered_map) so let me remove that:
 
  
 
-![bytell_successful_no_unordered](graphs/bytell_successful_no_unordered?raw=true "bytell_successful_no_unordered")
+![bytell_successful_no_unordered](graphs/bytell_successful_no_unordered.png?raw=true "bytell_successful_no_unordered")
 
 
 This one I’ll talk about a little bit. The hash tables I’m comparing here are google::dense_hash_map, ska::flat_hash_map (my fastest table from last year), bytell_hash_map (my new one from this blog post) and google_flat16_hash_map. This last one is my implementation of Google’s new hash table. Google hasn’t open-sourced their hash table yet, so I had to implement their hash table myself. I’m 95% sure that I got their performance right.
@@ -61,7 +61,7 @@ Otherwise I’d just like to point out that this new table easily beats Google�
 
 The second graph I’m going to show you is for unsuccessful lookups. This time I’m going to skip the step of showing you unordered_map:
 
-![bytell_unsuccessful](graphs/bytell_unsuccessful?raw=true "bytell_unsuccessful")
+![bytell_unsuccessful](graphs/bytell_unsuccessful.png?raw=true "bytell_unsuccessful")
 
 In unsuccessful lookups (looking up an item that’s not in the container) we see that Google’s new hash table really shines. My new hash table also does pretty well here, beating ska::flat_hash_map. It doesn’t do as well as Google’s. That’s probably OK though, for two reasons: 1. This hash table does well in both benchmarks, even if it isn’t the best in either. 2. Google’s hash table actually becomes kinda slow when it’s really full (the spikiness in the graph just before the table re-allocates), so you have to always watch out for that. Bytell_hash_map however has less variation in its performance.
 
